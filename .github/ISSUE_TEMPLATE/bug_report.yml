@@ -1,0 +1,43 @@
+name: Bug report
+description: Something is wrong or missing in xtop's output
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you saw, and what you expected instead. Screenshots welcome.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: xtop version
+      placeholder: output of `xtop --version`
+    validations:
+      required: true
+  - type: textarea
+    id: list
+    attributes:
+      label: "`xtop --list`"
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: snapshot
+    attributes:
+      label: "`xtop --snapshot`"
+      description: Remove anything you consider private from the process list.
+      render: text
+  - type: input
+    id: kernel
+    attributes:
+      label: Kernel and distro
+      placeholder: "`uname -r` and distribution, e.g. 7.0.0-42-generic, Ubuntu 26.04"
+    validations:
+      required: true
+  - type: input
+    id: terminal
+    attributes:
+      label: Terminal emulator
+      placeholder: e.g. kitty, Alacritty, GNOME Terminal, tmux

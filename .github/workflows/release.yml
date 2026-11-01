@@ -1,0 +1,50 @@
+name: Release
+
+# Push a tag like v0.1.0 to build a static x86_64 binary and publish a
+# GitHub release. The Homebrew formula in jgavinray/homebrew-tap builds from
+# the tag's source tarball, so it does not depend on these artifacts.
+on:
+  push:
+    tags: ["v*"]
+
+permissions: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Rust
+        run: rustup toolchain install stable --profile minimal && rustup default stable
+      - name: Check tag matches Cargo.toml
+        run: |
+          version="$(cargo pkgid | sed 's/.*[#@]//')"
+          test "${GITHUB_REF_NAME#v}" = "$version" || {
+            echo "tag $GITHUB_REF_NAME does not match Cargo.toml version $version" >&2
+            exit 1
+          }
+      - name: Test
+        run: cargo test --locked
+      - name: Build static binary
+        env:
+          RUSTFLAGS: -C target-feature=+crt-static
+        run: |
+          cargo build --release --locked --target x86_64-unknown-linux-gnu
+          file target/x86_64-unknown-linux-gnu/release/xtop | grep -q 'static'
+      - name: Package
+        run: |
+          name="xtop-${GITHUB_REF_NAME}-x86_64-linux"
+          mkdir "$name"
+          cp target/x86_64-unknown-linux-gnu/release/xtop README.md LICENSE "$name/"
+          tar czf "$name.tar.gz" "$name"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" xtop-*-x86_64-linux.tar.gz* \
+            --title "xtop $GITHUB_REF_NAME" --generate-notes --verify-tag

@@ -1,0 +1,23 @@
+[package]
+name = "xtop"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+description = "An htop-style terminal monitor for Intel GPUs (xe / i915)"
+authors = ["J. Gavin Ray <git@jgavinray.com>"]
+license = "GPL-2.0-only"
+repository = "https://github.com/jgavinray/xtop"
+homepage = "https://github.com/jgavinray/xtop"
+readme = "README.md"
+keywords = ["gpu", "intel", "monitor", "tui", "xe"]
+categories = ["command-line-utilities", "hardware-support"]
+exclude = [".github/"]
+
+[dependencies]
+libc = "0.2.191"
+ratatui = "0.30"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true

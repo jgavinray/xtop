@@ -1,0 +1,15 @@
+name: Feature request
+description: Suggest a metric, view, or GPU to support
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like xtop to show or do?
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Where does the data come from?
+      description: If you know the sysfs file, fdinfo key, or ioctl that exposes it, say so.
