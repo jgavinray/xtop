@@ -12,6 +12,8 @@ per-process table you can sort, filter and signal. xtop is a single binary
 with no runtime dependencies. It reads the kernel interfaces directly, so you
 don't need xpu-smi, Level Zero or root.
 
+![xtop Overview view on an Intel Arc Pro B70](assets/screenshot.png)
+
 ## Install
 
 **Homebrew** (Linux):
